@@ -9,7 +9,7 @@ $app['db.options'] = [
     "driver"    => "pdo_mysql",
     "host"      => 'localhost',
     "user"      => 'root',
-    "password"  => 'vagrantpass',
+    "password"  => 'root',
     "dbname"    => 'mpwar_performance_blog',
     "charset"   => "utf8"
 ];
