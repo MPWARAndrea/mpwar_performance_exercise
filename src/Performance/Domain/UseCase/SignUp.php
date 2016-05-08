@@ -4,6 +4,7 @@ namespace Performance\Domain\UseCase;
 
 use Performance\Domain\Author;
 use Performance\Domain\AuthorRepository;
+use Performance\Domain\AwsSThreeService;
 
 class SignUp
 {
@@ -12,12 +13,21 @@ class SignUp
 	 */
 	private $authorRepository;
 
-	public function __construct(AuthorRepository $authorRepository) {
+	/**
+	 * @var AwsSThreeService
+	 */
+	private $aws;
+
+	public function __construct(AuthorRepository $authorRepository,
+								AwsSThreeService $aws) {
 		$this->authorRepository = $authorRepository;
+		$this->aws = $aws;
+		$this->aws->connectAws();
 	}
 
-	public function execute($username, $password) {
+	public function execute($username, $password, $profile_picture) {
 		$author = Author::register($username, $password);
 		$this->authorRepository->save($author);
+
 	}
 }

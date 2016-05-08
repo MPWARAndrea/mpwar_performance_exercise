@@ -7,11 +7,13 @@ class Author
 	private $id;
 	private $username;
 	private $password;
+	private $picture;
 
-	public static function register($username, $password) {
+	public static function register($username, $password, $picture) {
 		$author = new Author();
-		$author->username = $username;
-		$author->password = password_hash($password, PASSWORD_DEFAULT);
+		$author->username 	= $username;
+		$author->password 	= password_hash($password, PASSWORD_DEFAULT);
+		$author->picture	= $picture;
 
 		return $author;
 	}
@@ -35,5 +37,9 @@ class Author
 
 	public function getUsername() {
 		return $this->username;
+	}
+
+	public function setUserPicture() {
+
 	}
 }
