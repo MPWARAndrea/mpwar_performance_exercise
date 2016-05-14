@@ -14,6 +14,7 @@ $app->register(new Performance\DomainServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new TwigServiceProvider());
 $app->register(new SessionServiceProvider());
+$app['session.storage.handler'] = null;
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new DoctrineServiceProvider);
 $app->register(new DoctrineOrmServiceProvider);
@@ -21,7 +22,7 @@ $app->register(new Predis\Silex\ClientsServiceProvider(),
     [
         'predis.clients' => [
             'client' => [
-                'host' => '127.0.0.1',
+                'host' => 'redis-host',
                 'port' => 6379
             ]
         ]
