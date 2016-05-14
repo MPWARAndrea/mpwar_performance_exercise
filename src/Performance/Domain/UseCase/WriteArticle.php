@@ -2,6 +2,7 @@
 
 namespace Performance\Domain\UseCase;
 
+use Performance\Domain\ArticleRankingRepository;
 use Performance\Domain\ArticleRepository;
 use Performance\Domain\Article;
 use Performance\Domain\AuthorRepository;
@@ -13,7 +14,7 @@ class WriteArticle
     /**
      * @var ArticleRepository
      */
-	private $articleRepository;
+    private $articleRepository;
 
     /**
      * @var AuthorRepository
@@ -23,26 +24,45 @@ class WriteArticle
     /**
      * @var SessionInterface
      */
-	private $session;
+    private $session;
 
-    public function __construct(ArticleRepository $articleRepository, AuthorRepository $authorRepository, SessionInterface $session) {
-        $this->articleRepository = $articleRepository;
-        $this->authorRepository = $authorRepository;
-        $this->session = $session;
+    /**
+     * @var ArticleRankingRepository
+     */
+    private $article_raking_repository;
+
+    public function __construct(
+        ArticleRepository $articleRepository,
+        AuthorRepository $authorRepository,
+        SessionInterface $session,
+        ArticleRankingRepository $an_article_raking_repository
+    )
+    {
+        $this->articleRepository         = $articleRepository;
+        $this->authorRepository          = $authorRepository;
+        $this->session                   = $session;
+        $this->article_raking_repository = $an_article_raking_repository;
     }
 
-    public function execute($title, $content) {
-        $author = $this->getAuthor();
+    public function execute(
+        $title,
+        $content
+    )
+    {
+        $author  = $this->getAuthor();
         $article = Article::write($title, $content, $author);
         $this->articleRepository->save($article);
+        $this->article_raking_repository->saveNew($article->getId());
 
         return $article;
     }
 
-    private function getAuthor() {
+    private function getAuthor()
+    {
         $author_id = $this->session->get('author_id');
 
-        if (!$author_id) {
+        if (!$author_id)
+        {
             throw new Forbidden('You must be logged in in order to write an article');
         }
 

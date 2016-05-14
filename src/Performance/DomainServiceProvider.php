@@ -2,6 +2,7 @@
 
 namespace Performance;
 
+
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -9,6 +10,10 @@ class DomainServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $app['ranking_article_repository'] = function () use ($app){
+            return new \Performance\Infrastructure\Database\RedisArticleRepository($app['predis']['client']);
+        };
+
         $app['useCases.signUp'] = function () use ($app) {
             return new \Performance\Domain\UseCase\SignUp($app['orm.em']->getRepository('Performance\Domain\Author'));
         };
@@ -18,7 +23,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.writeArticle'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\WriteArticle($app['orm.em']->getRepository('Performance\Domain\Article'), $app['orm.em']->getRepository('Performance\Domain\Author'), $app['session']);
+            return new \Performance\Domain\UseCase\WriteArticle($app['orm.em']->getRepository('Performance\Domain\Article'), $app['orm.em']->getRepository('Performance\Domain\Author'), $app['session'], $app['ranking_article_repository']);
         };
 
         $app['useCases.editArticle'] = function () use ($app) {
@@ -26,7 +31,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.readArticle'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\ReadArticle($app['orm.em']->getRepository('Performance\Domain\Article'));
+            return new \Performance\Domain\UseCase\ReadArticle($app['orm.em']->getRepository('Performance\Domain\Article'), $app['ranking_article_repository']);
         };
 
         $app['useCases.listArticles'] = function () use ($app) {
