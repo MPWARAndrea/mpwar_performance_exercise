@@ -21,7 +21,6 @@ class AwsSThree implements AwsSThreeService
 
     public function connectAws()
     {
-
         $client = new S3Client([
             'credentials' => [
                 'key'    => self::AWS_KEY,
@@ -34,17 +33,6 @@ class AwsSThree implements AwsSThreeService
         $aws3adapter = new AwsS3Adapter($client, self::AWS_STHREE_USER, 'optional-prefix');
 
         $this->filesystem = new Filesystem($aws3adapter, new Config([]));
-
-        // Check if file example exists
-        if($this->fileExists('example.txt'))
-        {
-            $this->deleteFile('example.txt');
-            $this->createFile('example.txt', 'another test content');
-        }
-
-//        // Write to image
-//        $filesystem->write('example.png', file_get_contents('local_path/to/image.png'));
-//        $filesystem->writeStream('example.png', fopen('local_path/to/image.png', 'r'));
 
     }
 
@@ -61,6 +49,12 @@ class AwsSThree implements AwsSThreeService
     public function createFile($file_name, $content)
     {
         $this->filesystem->write($file_name, $content);
+    }
+
+    public function createImageFile($new_file_name, $file_entire_path)
+    {
+        $this->filesystem->writeStream($new_file_name, fopen($file_entire_path, 'r'));
+//        $filesystem->write('example.png', file_get_contents('local_path/to/image.png'));
     }
 
 }

@@ -25,9 +25,9 @@ class SignUp
 		$this->aws->connectAws();
 	}
 
-	public function execute($username, $password, $profile_picture) {
-		$author = Author::register($username, $password);
+	public function execute($username, $password, $profile_picture, $profile_picture_path) {
+		$author = Author::register($username, $password, $profile_picture);
+		$this->aws->createImageFile($profile_picture, $profile_picture_path);
 		$this->authorRepository->save($author);
-
 	}
 }

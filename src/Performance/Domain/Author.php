@@ -23,6 +23,7 @@ class Author
 		$author->id = $authorArray['id'];
 		$author->username = $authorArray['username'];
 		$author->password = $authorArray['password'];
+		$author->password = $authorArray['picture'];
 
 		return $author;
 	}
@@ -39,7 +40,7 @@ class Author
 		return $this->username;
 	}
 
-	public function setUserPicture() {
-
+	public function getPicture() {
+		return $this->picture;
 	}
 }
