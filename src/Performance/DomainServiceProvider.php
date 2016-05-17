@@ -14,6 +14,10 @@ class DomainServiceProvider implements ServiceProviderInterface
             return new \Performance\Infrastructure\Database\RedisArticleRepository($app['predis']['client']);
         };
 
+        $app['article_ranking_repository'] = function () use ($app){
+            return new \Performance\Infrastructure\Database\RedisArticleRankingRepository($app['predis']['client']);
+        };
+
         $app['articles_repository_with_cache'] = function() use($app){
             return new \Performance\Infrastructure\Database\DoctrineRedisArticleRepository($app['orm.em']->getRepository('Performance\Domain\Article'), $app['redis_article_repository']);
         };
@@ -27,7 +31,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.writeArticle'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\WriteArticle($app['orm.em']->getRepository('Performance\Domain\Article'), $app['orm.em']->getRepository('Performance\Domain\Author'), $app['session'], $app['ranking_article_repository']);
+            return new \Performance\Domain\UseCase\WriteArticle($app['orm.em']->getRepository('Performance\Domain\Article'), $app['orm.em']->getRepository('Performance\Domain\Author'), $app['session'], $app['article_ranking_repository']);
         };
 
         $app['useCases.editArticle'] = function () use ($app) {
@@ -35,11 +39,11 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.readArticle'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\ReadArticle($app['articles_repository_with_cache']);
+            return new \Performance\Domain\UseCase\ReadArticle($app['articles_repository_with_cache'], $app['article_ranking_repository']);
         };
 
         $app['useCases.listArticles'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\ListArticles($app['articles_repository_with_cache']);
+            return new \Performance\Domain\UseCase\ListArticles($app['articles_repository_with_cache'], $app['article_ranking_repository']);
         };
 
         $app['controllers.readArticle'] = function () use ($app) {
@@ -63,7 +67,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['controllers.home'] = function () use ($app) {
-            return new \Performance\Controller\HomeController($app['twig'], $app['useCases.listArticles']);
+            return new \Performance\Controller\HomeController($app['twig'], $app['session'], $app['useCases.listArticles']);
         };
     }
 }

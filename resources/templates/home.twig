@@ -4,19 +4,58 @@
 		<title>Blog</title>
 	</head>
 	<body>
-		{% for article in articles %}
-			<h1><a href="{{ path('article', {article_id: article.id}) }}">{{ article.title | title }}</a></h1>
-			<h3>by {{ article.author.username }}, on {{ article.date | date("d/m/Y H:i") }}</h3>
+	    <h1>Blog</h1>
+		<main>
+        {% for article in articles %}
+            <h1><a href="{{ path('article', {article_id: article.id}) }}">{{ article.title | title }}</a></h1>
+            <h3>by {{ article.author.username }}, on {{ article.date | date("d/m/Y H:i") }}</h3>
+            <p>
+                {% if article.content | length > 100 %}
+                    {{ article.content | slice(0,100) }}
+                    <a href="{{ path('article', {article_id: article.id}) }}">more&hellip;</a>
+                {% else %}
+                    {{ article.content }}
+                {% endif %}
+            </p>
+        {% else %}
+            <h2>There are no articles to show</h2>
+        {% endfor %}
+		</main>
+		<section>
+		{% if global_articles is not empty %}
+			<h2>Top 5 global articles</h2>
+		{% endif %}
+		{% for global_article in global_articles %}
+			<h1><a href="{{ path('article', {article_id: global_article.id}) }}">{{ global_article.title | title }}</a></h1>
+			<h3>by {{ global_article.author.username }}, on {{ global_article.date | date("d/m/Y H:i") }}</h3>
 			<p>
-			{% if article.content | length > 100 %}
-				{{ article.content | slice(0,100) }}
-				<a href="{{ path('article', {article_id: article.id}) }}">more&hellip;</a>
+			{% if global_article.content | length > 100 %}
+				{{ global_article.content | slice(0,100) }}
+				<a href="{{ path('article', {article_id: global_article.id}) }}">more&hellip;</a>
 			{% else %}
-					{{ article.content }}
+					{{ global_article.content }}
 			{% endif %}
 			</p>
 		{% else %}
-			<h1>There are no articles to show</h1>
+			<h2>There are no global articles to show</h2>
 		{% endfor %}
+		</section>
+		<section>
+		{% if user_articles is not empty %}
+			<h2>Your top 5 articles</h2>
+		{% endif %}
+		{% for user_article in user_articles %}
+			<h1><a href="{{ path('article', {article_id: user_article.id}) }}">{{ user_article.title | title }}</a></h1>
+			<h3>by {{ user_article.author.username }}, on {{ user_article.date | date("d/m/Y H:i") }}</h3>
+			<p>
+				{% if user_article.content | length > 100 %}
+					{{ user_article.content | slice(0,100) }}
+					<a href="{{ path('article', {article_id: user_article.id}) }}">more&hellip;</a>
+				{% else %}
+					{{ user_article.content }}
+				{% endif %}
+			</p>
+		{% endfor %}
+		</section>
 	</body>
 </html>

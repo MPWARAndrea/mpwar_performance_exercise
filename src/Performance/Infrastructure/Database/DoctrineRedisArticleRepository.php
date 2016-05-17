@@ -22,12 +22,10 @@ final class DoctrineRedisArticleRepository implements ArticleRepository
     public function save(Article $article)
     {
         $this->persistence_repository->save($article);
-        $this->cache_repository->initRank($article->getId());
     }
 
     public function findOneById($article_id)
     {
-        $this->cache_repository->incrementRanking($article_id);
         $article_in_cache = $this->cache_repository->findOneById($article_id);
         if ($article_in_cache)
         {
@@ -35,7 +33,10 @@ final class DoctrineRedisArticleRepository implements ArticleRepository
         }
 
         $article_to_retrieve = $this->persistence_repository->findOneById($article_id);
-        $this->cache_repository->save($article_to_retrieve);
+        if(null !== $article_to_retrieve)
+        {
+            $this->cache_repository->save($article_to_retrieve);
+        }
 
         return $article_to_retrieve;
     }

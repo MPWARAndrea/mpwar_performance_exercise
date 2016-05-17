@@ -2,6 +2,7 @@
 
 namespace Performance\Controller;
 
+use Performance\Domain\ArticleRankingRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Performance\Domain\UseCase\ReadArticle;
@@ -18,16 +19,21 @@ class ArticleController
      */
     private $useCase;
 
-    public function __construct(\Twig_Environment $templating, ReadArticle $useCase) {
+    public function __construct(
+        \Twig_Environment $templating,
+        ReadArticle $useCase
+    )
+    {
         $this->template = $templating;
-        $this->useCase = $useCase;
+        $this->useCase  = $useCase;
     }
 
     public function get($article_id)
     {
         $article = $this->useCase->execute($article_id);
 
-        if (!$article) {
+        if (!$article)
+        {
             throw new HttpException(404, "Article $article_id does not exist.");
         }
 

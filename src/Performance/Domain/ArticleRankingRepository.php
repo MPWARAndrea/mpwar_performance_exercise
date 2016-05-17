@@ -4,11 +4,11 @@ namespace Performance\Domain;
 
 interface ArticleRankingRepository
 {
-    public function initRank($article_id);
+    public function initRank(Article $an_article);
 
-    public function incrementRanking($article_id);
+    public function incrementRanking(Article $an_article);
 
     public function findGlobalRankingIds();
 
-    public function findLoggedUserRankingIds();
+    public function findLoggedUserRankingIds($author_id);
 }

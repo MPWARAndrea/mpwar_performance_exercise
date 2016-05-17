@@ -3,18 +3,14 @@
 namespace Performance\Infrastructure\Database;
 
 use Performance\Domain\Article;
-use Performance\Domain\ArticleRankingRepository;
 use Performance\Domain\ArticleRepository;
 use Predis\Client;
 
-final class RedisArticleRepository implements ArticleRankingRepository, ArticleRepository
+final class RedisArticleRepository implements ArticleRepository
 {
-    const NUMBER_OF_ARTICLES_OFFSET = 5;
-
     const CACHE_PREFIX    = 'query_';
     const LIST_CACHE_NAME = 'articles_list';
     const ENTITY_NAME     = 'article';
-    const GLOBAL_NAME_SET = 'articles_ranking';
 
     const ALL_ARTICLES_CACHE_TTL       = 60;
     const INDIVIDUAL_ARTICLE_CACHE_TTL = 300;
@@ -24,26 +20,6 @@ final class RedisArticleRepository implements ArticleRankingRepository, ArticleR
     public function __construct(Client $a_redis_client)
     {
         $this->redis_client = $a_redis_client;
-    }
-
-    public function initRank($article_id)
-    {
-        $this->redis_client->zadd(self::GLOBAL_NAME_SET, [self::ENTITY_NAME . ':' . $article_id => 0]);
-    }
-
-    public function incrementRanking($article_id)
-    {
-        $this->redis_client->zincrby(self::GLOBAL_NAME_SET, 1, self::ENTITY_NAME . ':' . $article_id);
-    }
-
-    public function findGlobalRankingIds()
-    {
-        return $this->redis_client->zrevrange(self::GLOBAL_NAME_SET, 0, self::NUMBER_OF_ARTICLES_OFFSET);
-    }
-
-    public function findLoggedUserRankingIds()
-    {
-
     }
 
     public function save(Article $article)

@@ -25,16 +25,20 @@ class WriteArticle
      * @var SessionInterface
      */
     private $session;
-    
+
+    private $article_ranking_repository;
+
     public function __construct(
         ArticleRepository $articleRepository,
         AuthorRepository $authorRepository,
-        SessionInterface $session
+        SessionInterface $session,
+        ArticleRankingRepository $an_article_ranking_repository
     )
     {
         $this->articleRepository         = $articleRepository;
         $this->authorRepository          = $authorRepository;
         $this->session                   = $session;
+        $this->article_ranking_repository = $an_article_ranking_repository;
     }
 
     public function execute(
@@ -45,6 +49,7 @@ class WriteArticle
         $author  = $this->getAuthor();
         $article = Article::write($title, $content, $author);
         $this->articleRepository->save($article);
+        $this->article_ranking_repository->initRank($article);
 
         return $article;
     }
