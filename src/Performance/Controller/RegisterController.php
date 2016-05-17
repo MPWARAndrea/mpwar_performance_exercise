@@ -25,10 +25,12 @@ class RegisterController
      */
     private $useCase;
 
-    public function __construct(\Twig_Environment $templating, UrlGeneratorInterface $url_generator, SignUp $useCase) {
-        $this->template = $templating;
-        $this->url_generator = $url_generator;
-        $this->useCase = $useCase;
+    public function __construct(\Twig_Environment $templating,
+                                UrlGeneratorInterface $url_generator,
+                                SignUp $useCase) {
+        $this->template         = $templating;
+        $this->url_generator    = $url_generator;
+        $this->useCase          = $useCase;
     }
 
     public function get()
@@ -38,11 +40,14 @@ class RegisterController
 
     public function post(Request $request)
     {
-    	$username = $request->request->get('username');
-    	$password = $request->request->get('password');
+    	$username               = $request->request->get('username');
+    	$password               = $request->request->get('password');
+    	$profile_picture        = microtime() . $request->files->get('profile_picture')->getClientOriginalName();
+        $profile_picture_path   = $request->files->get('profile_picture')->getRealPath();
 
-    	$this->useCase->execute($username, $password);
+    	$this->useCase->execute($username, $password, $profile_picture, $profile_picture_path);
 
         return new RedirectResponse($this->url_generator->generate('login'));
     }
+
 }

@@ -10,6 +10,10 @@ class DomainServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $app['services.awsSThree'] = function () use ($app) {
+                return new \Performance\Domain\AwsSThree();
+        };
+
         $app['redis_article_repository'] = function () use ($app){
             return new \Performance\Infrastructure\Database\RedisArticleRepository($app['predis']['client']);
         };
@@ -23,7 +27,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.signUp'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\SignUp($app['orm.em']->getRepository('Performance\Domain\Author'));
+            return new \Performance\Domain\UseCase\SignUp($app['orm.em']->getRepository('Performance\Domain\Author'), $app['services.awsSThree']);
         };
 
         $app['useCases.login'] = function () use ($app) {
@@ -45,6 +49,8 @@ class DomainServiceProvider implements ServiceProviderInterface
         $app['useCases.listArticles'] = function () use ($app) {
             return new \Performance\Domain\UseCase\ListArticles($app['articles_repository_with_cache'], $app['article_ranking_repository']);
         };
+
+        /** Controllers **/
 
         $app['controllers.readArticle'] = function () use ($app) {
             return new \Performance\Controller\ArticleController($app['twig'], $app['useCases.readArticle']);
