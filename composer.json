@@ -10,7 +10,8 @@
 		"symfony/twig-bridge": "~3.0",
 		"twbs/bootstrap": "^3.3",
 		"league/flysystem": "1.*",
-		"league/flysystem-aws-s3-v3": "1.*"
+		"league/flysystem-aws-s3-v3": "1.*",
+		"predis/service-provider": "dev-master"
     },
     "autoload": {
         "psr-4": { "Performance\\": "src/Performance" }
