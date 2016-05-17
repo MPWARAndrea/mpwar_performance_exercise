@@ -17,5 +17,3 @@ Performance\Domain\Author:
     picture:
       type: string
       length: 255
-#    picture:
-#      type: file

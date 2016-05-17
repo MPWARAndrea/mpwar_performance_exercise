@@ -24,7 +24,6 @@ class Login
 
     public function execute($username, $plainTextPassword) {
         $author = $this->authorRepository->findOneByUsername($username);
-
         if ($author) {
             if ($author->verifyPassword($plainTextPassword)) {
                 $this->session->set('author_id', $author->getId());
