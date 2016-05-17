@@ -23,7 +23,7 @@ class Author
 		$author->id = $authorArray['id'];
 		$author->username = $authorArray['username'];
 		$author->password = $authorArray['password'];
-		$author->password = $authorArray['picture'];
+		$author->picture = $authorArray['picture'];
 
 		return $author;
 	}
