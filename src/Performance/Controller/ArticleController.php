@@ -48,8 +48,8 @@ class ArticleController
     private function setCache(Response $response)
     {
         $response->setPublic();
-        $response->setMaxAge(600);
-        $response->setSharedMaxAge(600);
+        $response->setMaxAge(120);
+        $response->setSharedMaxAge(120);
 
         $response->setEtag(md5($response->getContent()));
         $response->isNotModified($this->request);
