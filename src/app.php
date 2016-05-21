@@ -22,8 +22,10 @@ $app->register(new Predis\Silex\ClientsServiceProvider(),
     [
         'predis.clients' => [
             'client' => [
+                'scheme' => 'tcp',
                 'host' => 'redis-host',
-                'port' => 6379
+                'port' => 6379,
+                'timeout' => 20.0
             ]
         ]
     ]
