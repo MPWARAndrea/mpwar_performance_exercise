@@ -5,6 +5,7 @@ namespace Performance;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class DomainServiceProvider implements ServiceProviderInterface
 {
@@ -53,7 +54,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         /** Controllers **/
 
         $app['controllers.readArticle'] = function () use ($app) {
-            return new \Performance\Controller\ArticleController($app['twig'], $app['useCases.readArticle']);
+            return new \Performance\Controller\ArticleController($app['twig'], $app['useCases.readArticle'], $app['request_stack']->getCurrentRequest());
         };
 
         $app['controllers.writeArticle'] = function () use ($app) {
