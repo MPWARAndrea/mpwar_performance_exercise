@@ -2,6 +2,7 @@
 
 namespace Performance\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Performance\Domain\UseCase\ListArticles;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -16,12 +17,14 @@ class HomeController
     public function __construct(
         \Twig_Environment $templating,
         SessionInterface $session,
-        ListArticles $useCase
+        ListArticles $useCase,
+        Request $request
     )
     {
         $this->template = $templating;
         $this->session  = $session;
         $this->useCase  = $useCase;
+        $this->request = $request;
     }
 
     public function get()
@@ -36,9 +39,26 @@ class HomeController
             $content = $this->useCase->execute();
         }
 
-        return new Response($this->template->render('home.twig',
-            ['articles' => $content['articles'], 'global_articles' => $content['global_articles'], 'user_articles' => $content['user_articles']]
+        $response = new Response($this->template->render('home.twig',
+            ['articles'        => $content['articles'],
+             'global_articles' => $content['global_articles'],
+             'user_articles'   => $content['user_articles']
+            ]
         )
         );
+        $response = $this->setCache($response);
+
+        return $response;
+    }
+
+    private function setCache(Response $response)
+    {
+        $response->setPrivate();
+        $response->setMaxAge(120);
+
+        $response->setEtag(md5($response->getContent()));
+        $response->isNotModified($this->request);
+
+        return $response;
     }
 }
