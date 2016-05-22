@@ -53,39 +53,3 @@ POLICY;
     }
 
 }
-
-/*
- *         $cloud_front = CloudFrontClient::factory(array(
-            'private_key'   => $ssh_path,
-            'key_pair_id'   => 'APKAJ3SNHGUQBWAAB3PQ',
-            'region'        => 'eu-west-1',
-            'version'       => 'latest'
-        ));
-
-        $cloudfront_files_url = "http://dphdmsup0cd6z.cloudfront.net";
-        $image = $article_to_read->getAuthor()->getPicture();
-        $image_prompt = "$cloudfront_files_url/$image";
-        $expires = time() + 3;
-
-
-        $custom_policy = <<<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "s3:*",
-      "Resource": "*"
-    }
-  ]
-}
-POLICY;
-
-        $signedCloudfront = $cloud_front->getSignedUrl(array(
-            'private_key'   => $ssh_path,
-            'key_pair_id'   => 'APKAJ3SNHGUQBWAAB3PQ',
-            'url'           => $image_prompt,
-            'expires'       => $expires,
-            'policy'        => $custom_policy
-        ));
- */

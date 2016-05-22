@@ -23,26 +23,22 @@ class ArticleController
 
     private $request;
 
-    private $ssh_path;
-
     public function __construct(
         \Twig_Environment $templating,
         ReadArticle $useCase,
-        Request $request,
-        $ssh_path
+        Request $request
     )
     {
         $this->template = $templating;
         $this->useCase  = $useCase;
         $this->request  = $request;
-        $this->ssh_path = $ssh_path;
     }
 
     public function get($article_id)
     {
-        $all_article = $this->useCase->execute($article_id, $this->ssh_path);
-        $article = $all_article['article'];
-        $profile_image = $all_article['image'];
+        $all_article    = $this->useCase->execute($article_id);
+        $article        = $all_article['article'];
+        $profile_image  = $all_article['image'];
 
         if (!$article)
         {
