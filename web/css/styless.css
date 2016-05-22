@@ -1,0 +1,26 @@
+body {
+    font-size: 18px;
+    font-family: sans-serif;
+}
+
+.top-5-global-articles h2,
+.your-top-5-articles h2
+{
+    font-size: 25px;
+}
+.top-5-global-articles h1,
+.your-top-5-articles h1
+{
+    font-size: 20px;
+}
+.top-5-global-articles h3,
+.your-top-5-articles h3
+{
+    font-size: 15px;
+}
+.form-control-long{
+    width: 100%;
+}
+#username, #password{
+    max-width: 200px;
+}
