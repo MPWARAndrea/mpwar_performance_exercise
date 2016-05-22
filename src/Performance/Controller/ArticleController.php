@@ -9,6 +9,9 @@ use Performance\Domain\UseCase\ReadArticle;
 
 class ArticleController
 {
+    const CLOUD_FRONT_ACCESS_KEY_ID     = 'AKIAJ4G6D4XXQHHNSTEA';
+    const CLOUD_FRONT_SECRET_ACCESS_KEY = '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';
+
     /**
      * @var \Twig_Environment
      */
@@ -33,13 +36,16 @@ class ArticleController
 
     public function get($article_id)
     {
-        $article = $this->useCase->execute($article_id);
+        $all_article    = $this->useCase->execute($article_id);
+        $article        = $all_article['article'];
+        $profile_image  = $all_article['image'];
 
         if (!$article)
         {
             throw new HttpException(404, "Article $article_id does not exist.");
         }
-        $response = new Response($this->template->render('article.twig', ['article' => $article]));
+        $response = new Response($this->template->render('article.twig',
+                                 ['article' => $article, 'image' => $profile_image]));
         $response = $this->setCache($response);
 
         return $response;

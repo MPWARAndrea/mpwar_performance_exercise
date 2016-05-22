@@ -24,3 +24,4 @@ $app['orm.em.options'] = [
         ],
     ]
 ];
+$app['ssh.path'] = __DIR__ . '/cloudfront.pem';

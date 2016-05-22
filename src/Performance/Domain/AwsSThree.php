@@ -7,6 +7,7 @@
 namespace Performance\Domain;
 
 use Aws\S3\S3Client;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
@@ -30,8 +31,8 @@ class AwsSThree implements AwsSThreeService
             'version' => 'latest',
         ]);
 
-        $aws3adapter = new AwsS3Adapter($client, self::AWS_STHREE_USER, 'optional-prefix');
-
+        $aws3adapter = new AwsS3Adapter($client, self::AWS_STHREE_USER,
+                                        'optional-prefix', array('ACL' => 'public-read'));
         $this->filesystem = new Filesystem($aws3adapter, new Config([]));
 
     }
@@ -48,13 +49,12 @@ class AwsSThree implements AwsSThreeService
 
     public function createFile($file_name, $content)
     {
-        $this->filesystem->write($file_name, $content);
+        $this->filesystem->write($file_name, $content, ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
     }
 
     public function createImageFile($new_file_name, $file_entire_path)
     {
         $this->filesystem->writeStream($new_file_name, fopen($file_entire_path, 'r'));
-//        $filesystem->write('example.png', file_get_contents('local_path/to/image.png'));
     }
 
 }
