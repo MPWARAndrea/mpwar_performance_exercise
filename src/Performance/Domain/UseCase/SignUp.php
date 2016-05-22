@@ -18,14 +18,6 @@ class SignUp
 	 */
 	private $aws;
 
-	const CLEAN_CHARACTERS = array("\\", "¨", "º", "-", "~",
-									"#", "@", "|", "!", "\"",
-									"·", "$", "%", "&", "/",
-									"(", ")", "?", "'", "¡",
-									"¿", "[", "^", "<code>",
-									"]", "+", "}", "{", "¨",
-									"´", ">", "< ", ";", ",",
-									":", " ");
 
 	public function __construct(AuthorRepository $authorRepository,
 								AwsSThreeService $aws) {
@@ -36,7 +28,15 @@ class SignUp
 
 	public function execute($username, $password, $profile_picture, $profile_picture_path) {
 
-		$profile_picture = str_replace(self::CLEAN_CHARACTERS, '-', microtime() . $profile_picture);
+		$profile_picture = str_replace(
+            ["\\", "¨", "º", "-", "~",
+			"#", "@", "|", "!", "\"",
+			"·", "$", "%", "&", "/",
+			"(", ")", "?", "'", "¡",
+			"¿", "[", "^", "<code>",
+			"]", "+", "}", "{", "¨",
+			"´", ">", "< ", ";", ",",
+			":", " "], '-', microtime() . $profile_picture);
 
 		$author = Author::register($username, $password, $profile_picture);
 		$this->aws->createImageFile($profile_picture, $profile_picture_path);
