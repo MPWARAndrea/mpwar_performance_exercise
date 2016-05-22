@@ -11,6 +11,10 @@ class DomainServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $app['services.cloudFront'] = function () use ($app) {
+                return new \Performance\Domain\CloudFront($app['ssh.path']);
+        };
+
         $app['services.awsSThree'] = function () use ($app) {
                 return new \Performance\Domain\AwsSThree();
         };
@@ -44,7 +48,7 @@ class DomainServiceProvider implements ServiceProviderInterface
         };
 
         $app['useCases.readArticle'] = function () use ($app) {
-            return new \Performance\Domain\UseCase\ReadArticle($app['articles_repository_with_cache'], $app['article_ranking_repository']);
+            return new \Performance\Domain\UseCase\ReadArticle($app['articles_repository_with_cache'], $app['article_ranking_repository'], $app['services.cloudFront']);
         };
 
         $app['useCases.listArticles'] = function () use ($app) {
