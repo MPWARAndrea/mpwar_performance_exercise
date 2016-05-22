@@ -42,7 +42,7 @@ class RegisterController
     {
     	$username               = $request->request->get('username');
     	$password               = $request->request->get('password');
-    	$profile_picture        = microtime() . $request->files->get('profile_picture')->getClientOriginalName();
+    	$profile_picture        = $request->files->get('profile_picture')->getClientOriginalName();
         $profile_picture_path   = $request->files->get('profile_picture')->getRealPath();
 
     	$this->useCase->execute($username, $password, $profile_picture, $profile_picture_path);

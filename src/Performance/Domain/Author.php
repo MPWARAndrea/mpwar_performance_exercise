@@ -10,7 +10,7 @@ class Author
 	private $picture;
 
 	public static function register($username, $password, $picture) {
-		$author = new Author();
+		$author 			= new Author();
 		$author->username 	= $username;
 		$author->password 	= password_hash($password, PASSWORD_DEFAULT);
 		$author->picture	= $picture;
@@ -19,11 +19,11 @@ class Author
 	}
 
 	public static function fromArray($authorArray) {
-		$author = new Author();
-		$author->id = $authorArray['id'];
-		$author->username = $authorArray['username'];
-		$author->password = $authorArray['password'];
-		$author->picture = $authorArray['picture'];
+		$author 			= new Author();
+		$author->id 		= $authorArray['id'];
+		$author->username 	= $authorArray['username'];
+		$author->password 	= $authorArray['password'];
+		$author->picture 	= $authorArray['picture'];
 
 		return $author;
 	}
